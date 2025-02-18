@@ -41,259 +41,261 @@ Management App is designed to streamline project workflows, allowing teams to co
 ---
 
 ## Architecture
-
-Management
-│   .env
-│   .gitattributes
-│   .gitignore
-│   docker-compose.yml
-│   README.md
-│   
-├───backend
-│   │   .gitignore
-│   │   Dockerfile
-│   │   manage.py
-│   │   requirements.txt
-│   │   
-│   ├───api
-│   │   │   admin.py
-│   │   │   apps.py
-│   │   │   consumers.py
-│   │   │   middleware.py
-│   │   │   permissions.py
-│   │   │   routing.py
-│   │   │   signals.py
-│   │   │   tests.py
-│   │   │   urls.py
-│   │   │   __init__.py
-│   │   │   
-│   │   ├───decorators
-│   │   │       permission_decorator.py
-│   │   │       __init__.py
-│   │   │       
-│   │   ├───migrations
-│   │   │       __init__.py
-│   │   │       
-│   │   ├───models
-│   │   │       client.py
-│   │   │       notification.py
-│   │   │       phase.py
-│   │   │       post.py
-│   │   │       project.py
-│   │   │       task.py
-│   │   │       user.py
-│   │   │       vacation.py
-│   │   │       __init__.py
-│   │   │       
-│   │   ├───notification
-│   │   │       notification_manager.py
-│   │   │       notification_variables.py
-│   │   │       __init__.py
-│   │   │
-│   │   ├───serializers
-│   │   │       client_serializer.py
-│   │   │       notification_serializer.py
-│   │   │       phase_serializer.py
-│   │   │       post_serializer.py
-│   │   │       project_serializer.py
-│   │   │       register_serializer.py
-│   │   │       restricted_user_serializer.py
-│   │   │       task_serializer.py
-│   │   │       user_serializer.py
-│   │   │       vacation_serializer.py
-│   │   │       __init__.py
-│   │   │
-│   │   └───views
-│   │           client_viewset.py
-│   │           current_user_view.py
-│   │           notification_viewset.py
-│   │           phase_viewset.py
-│   │           post_viewset.py
-│   │           project_viewset.py
-│   │           register_view.py
-│   │           task_viewset.py
-│   │           user_viewset.py
-│   │           vacation_viewset.py
-│   │           __init__.py
-│   │
-│   ├───management
-│   │       asgi.py
-│   │       settings.py
-│   │       urls.py
-│   │       wsgi.py
-│   │       __init__.py
-│   │
-│   └───media
-│       └───profile_pictures
-└───frontend
-    │   .gitignore
-    │   Dockerfile
-    │   nginx.conf
-    │   package-lock.json
-    │   package.json
-    │   README.md
-    │
-    ├───public
-    │       favicon.ico
-    │       index.html
-    │       logo192.png
-    │       logo512.png
-    │       manifest.json
-    │       robots.txt
-    │
-    └───src
-        │   App.css
-        │   App.js
-        │   App.test.js
-        │   Axios.js
-        │   axiosConfig.js
-        │   fileUrl.js
-        │   index.css
-        │   index.js
-        │   logo.svg
-        │   reportWebVitals.js
-        │   setupTests.js
-        │
-        ├───components
-        │   ├───AboutModule
-        │   │       About.js
-        │   │
-        │   ├───ClientsModule
-        │   │   │   Clients.js
-        │   │   │
-        │   │   ├───api
-        │   │   │       clientsApi.js
-        │   │   │
-        │   │   ├───components
-        │   │   │   ├───Dialogs
-        │   │   │   │       ClientEditDialog.js
-        │   │   │   │       ClientInfoDialog.js
-        │   │   │   │
-        │   │   │   └───Tabs
-        │   │   │           AddClientTab.js
-        │   │   │           ClientsListTab.js
-        │   │   │
-        │   │   └───hooks
-        │   │           useClientsData.js
-        │   │
-        │   ├───HomeModule
-        │   │       Home.js
-        │   │
-        │   ├───images
-        │   │       logo_ps.png
-        │   │
-        │   ├───LayoutModule
-        │   │       AccountMenu.js
-        │   │       Footer.js
-        │   │       NavBar.js
-        │   │
-        │   ├───LoginModule
-        │   │       Login.js
-        │   │
-        │   ├───ProfileModule
-        │   │   │   Profile.js
-        │   │   │
-        │   │   ├───api
-        │   │   │       profileApi.js
-        │   │   │
-        │   │   ├───components
-        │   │   │   ├───Dialogs
-        │   │   │   │       EditPasswordDialog.js
-        │   │   │   │
-        │   │   │   └───Tabs
-        │   │   └───hooks
-        │   │           useProfileData.js
-        │   │
-        │   ├───ProjectsModule
-        │   │   │   Projects.js
-        │   │   │
-        │   │   ├───api
-        │   │   │       projectsApi.js
-        │   │   │
-        │   │   ├───components
-        │   │   │   ├───Dialogs
-        │   │   │   │       PhaseAddDialog.js
-        │   │   │   │       PhaseDeleteDialog.js
-        │   │   │   │       PhaseInfoDialog.js
-        │   │   │   │       PhaseUpdateDialog.js
-        │   │   │   │       ProjectDeleteDialog.js
-        │   │   │   │       ProjectEditDialog.js
-        │   │   │   │       ProjectInfoDialog.js
-        │   │   │   │
-        │   │   │   └───Tabs
-        │   │   │           AddProjectTab.js
-        │   │   │           ProjectsListTab.js
-        │   │   │
-        │   │   └───hooks
-        │   │           useProjectsData.js
-        │   │
-        │   ├───ReinforcementDimModule
-        │   │       ReinforcementDimensioning.js
-        │   │       reinforcement_calculations.js
-        │   │       
-        │   ├───SlicingModule
-        │   │       Slicing.js
-        │   │       slicing_calculations.js
-        │   │
-        │   ├───TasksModule
-        │   │   │   Tasks.js
-        │   │   │
-        │   │   ├───api
-        │   │   │       tasksApi.js
-        │   │   │
-        │   │   ├───components
-        │   │   │   │   Variables.js
-        │   │   │   │
-        │   │   │   ├───Calendar
-        │   │   │   │       Backup.js
-        │   │   │   │       Calendar.css
-        │   │   │   │       Calendar.js
-        │   │   │   │
-        │   │   │   ├───Dialogs
-        │   │   │   │       AddPostDialog.js
-        │   │   │   │       AddVacationDialog.js
-        │   │   │   │       DeletePostDialog.js
-        │   │   │   │       DeleteTaskDialog.js
-        │   │   │   │       PostEditDialog.js
-        │   │   │   │       PostInfoDialog.js
-        │   │   │   │       TaskEditDialog.js
-        │   │   │   │       TaskInfoDialog.js
-        │   │   │   │       VacationEditDialog.js
-        │   │   │   │       VacationInfoDialog.js
-        │   │   │   │
-        │   │   │   └───Tabs
-        │   │   │           AddTaskTab.js
-        │   │   │           CalendarTab.js
-        │   │   │           TasksListTab.js
-        │   │   │
-        │   │   └───hooks
-        │   │           useTasksData.js
-        │   │
-        │   ├───UsersModule
-        │   │   │   Users.js
-        │   │   │
-        │   │   ├───api
-        │   │   │       usersApi.js
-        │   │   │
-        │   │   ├───components
-        │   │   │   │   Variables.js
-        │   │   │   │
-        │   │   │   ├───Dialogs
-        │   │   │   │       UserEditDialog.js
-        │   │   │   │       UserInfoDialog.js
-        │   │   │   │
-        │   │   │   └───Tabs
-        │   │   │           AddUserTab.js
-        │   │   │           UsersListTab.js
-        │   │   │
-        │   │   └───hooks
-        │   │           useUsersData.js
-        │   │
-        │   └───utils
-        │           const_variables.js
-        │
-        └───theme
-                colors.js
+  ```bash
+  Management
+  |   .env
+  |   .gitattributes
+  |   .gitignore
+  |   docker-compose.yml
+  |   README.md
+  |   
+  +---backend
+  |   |   .gitignore
+  |   |   Dockerfile
+  |   |   manage.py
+  |   |   requirements.txt
+  |   |   
+  |   +---api
+  |   |   |   admin.py
+  |   |   |   apps.py
+  |   |   |   consumers.py
+  |   |   |   middleware.py
+  |   |   |   permissions.py
+  |   |   |   routing.py
+  |   |   |   signals.py
+  |   |   |   tests.py
+  |   |   |   urls.py
+  |   |   |   __init__.py
+  |   |   |   
+  |   |   +---decorators
+  |   |   |       permission_decorator.py
+  |   |   |       __init__.py
+  |   |   |       
+  |   |   +---migrations
+  |   |   |       0001_initial.py
+  |   |   |       __init__.py
+  |   |   |       
+  |   |   +---models
+  |   |   |       client.py
+  |   |   |       notification.py
+  |   |   |       phase.py
+  |   |   |       post.py
+  |   |   |       project.py
+  |   |   |       task.py
+  |   |   |       user.py
+  |   |   |       vacation.py
+  |   |   |       __init__.py
+  |   |   |       
+  |   |   +---notification
+  |   |   |       notification_manager.py
+  |   |   |       notification_variables.py
+  |   |   |       __init__.py
+  |   |   |
+  |   |   +---serializers
+  |   |   |       client_serializer.py
+  |   |   |       notification_serializer.py
+  |   |   |       phase_serializer.py
+  |   |   |       post_serializer.py
+  |   |   |       project_serializer.py
+  |   |   |       register_serializer.py
+  |   |   |       restricted_user_serializer.py
+  |   |   |       task_serializer.py
+  |   |   |       user_serializer.py
+  |   |   |       vacation_serializer.py
+  |   |   |       __init__.py
+  |   |   |
+  |   |   \---views
+  |   |           client_viewset.py
+  |   |           current_user_view.py
+  |   |           notification_viewset.py
+  |   |           phase_viewset.py
+  |   |           post_viewset.py
+  |   |           project_viewset.py
+  |   |           register_view.py
+  |   |           task_viewset.py
+  |   |           user_viewset.py
+  |   |           vacation_viewset.py
+  |   |           __init__.py
+  |   |
+  |   +---management
+  |   |       asgi.py
+  |   |       settings.py
+  |   |       urls.py
+  |   |       wsgi.py
+  |   |       __init__.py
+  |   |
+  |   +---media
+  |   \---staticfiles
+  \---frontend
+      |   .gitignore
+      |   Dockerfile
+      |   nginx.conf
+      |   package-lock.json
+      |   package.json
+      |   README.md
+      |
+      +---public
+      |       favicon.ico
+      |       index.html
+      |       logo192.png
+      |       logo512.png
+      |       manifest.json
+      |       robots.txt
+      |
+      \---src
+          |   App.css
+          |   App.js
+          |   App.test.js
+          |   Axios.js
+          |   axiosConfig.js
+          |   fileUrl.js
+          |   index.css
+          |   index.js
+          |   logo.svg
+          |   reportWebVitals.js
+          |   setupTests.js
+          |
+          +---components
+          |   +---AboutModule
+          |   |       About.js
+          |   |
+          |   +---ClientsModule
+          |   |   |   Clients.js
+          |   |   |
+          |   |   +---api
+          |   |   |       clientsApi.js
+          |   |   |
+          |   |   +---components
+          |   |   |   +---Dialogs
+          |   |   |   |       ClientEditDialog.js
+          |   |   |   |       ClientInfoDialog.js
+          |   |   |   |
+          |   |   |   \---Tabs
+          |   |   |           AddClientTab.js
+          |   |   |           ClientsListTab.js
+          |   |   |
+          |   |   \---hooks
+          |   |           useClientsData.js
+          |   |
+          |   +---HomeModule
+          |   |       Home.js
+          |   |
+          |   +---images
+          |   |       logo_ps.png
+          |   |
+          |   +---LayoutModule
+          |   |       AccountMenu.js
+          |   |       Footer.js
+          |   |       NavBar.js
+          |   |
+          |   +---LoginModule
+          |   |       Login.js
+          |   |
+          |   +---ProfileModule
+          |   |   |   Profile.js
+          |   |   |
+          |   |   +---api
+          |   |   |       profileApi.js
+          |   |   |
+          |   |   +---components
+          |   |   |   +---Dialogs
+          |   |   |   |       EditPasswordDialog.js
+          |   |   |   |
+          |   |   |   \---Tabs
+          |   |   \---hooks
+          |   |           useProfileData.js
+          |   |
+          |   +---ProjectsModule
+          |   |   |   Projects.js
+          |   |   |
+          |   |   +---api
+          |   |   |       projectsApi.js
+          |   |   |
+          |   |   +---components
+          |   |   |   +---Dialogs
+          |   |   |   |       PhaseAddDialog.js
+          |   |   |   |       PhaseDeleteDialog.js
+          |   |   |   |       PhaseInfoDialog.js
+          |   |   |   |       PhaseUpdateDialog.js
+          |   |   |   |       ProjectDeleteDialog.js
+          |   |   |   |       ProjectEditDialog.js
+          |   |   |   |       ProjectInfoDialog.js
+          |   |   |   |
+          |   |   |   \---Tabs
+          |   |   |           AddProjectTab.js
+          |   |   |           ProjectsListTab.js
+          |   |   |
+          |   |   \---hooks
+          |   |           useProjectsData.js
+          |   |
+          |   +---ReinforcementDimModule
+          |   |       ReinforcementDimensioning.js
+          |   |       reinforcement_calculations.js
+          |   |
+          |   +---SlicingModule
+          |   |       Slicing.js
+          |   |       slicing_calculations.js
+          |   |
+          |   +---TasksModule
+          |   |   |   Tasks.js
+          |   |   |   
+          |   |   +---api
+          |   |   |       tasksApi.js
+          |   |   |
+          |   |   +---components
+          |   |   |   |   Variables.js
+          |   |   |   |
+          |   |   |   +---Calendar
+          |   |   |   |       Backup.js
+          |   |   |   |       Calendar.css
+          |   |   |   |       Calendar.js
+          |   |   |   |
+          |   |   |   +---Dialogs
+          |   |   |   |       AddPostDialog.js
+          |   |   |   |       AddVacationDialog.js
+          |   |   |   |       DeletePostDialog.js
+          |   |   |   |       DeleteTaskDialog.js
+          |   |   |   |       PostEditDialog.js
+          |   |   |   |       PostInfoDialog.js
+          |   |   |   |       TaskEditDialog.js
+          |   |   |   |       TaskInfoDialog.js
+          |   |   |   |       VacationEditDialog.js
+          |   |   |   |       VacationInfoDialog.js
+          |   |   |   |
+          |   |   |   \---Tabs
+          |   |   |           AddTaskTab.js
+          |   |   |           CalendarTab.js
+          |   |   |           TasksListTab.js
+          |   |   |
+          |   |   \---hooks
+          |   |           useTasksData.js
+          |   |
+          |   +---UsersModule
+          |   |   |   Users.js
+          |   |   |
+          |   |   +---api
+          |   |   |       usersApi.js
+          |   |   |
+          |   |   +---components
+          |   |   |   |   Variables.js
+          |   |   |   |
+          |   |   |   +---Dialogs
+          |   |   |   |       UserEditDialog.js
+          |   |   |   |       UserInfoDialog.js
+          |   |   |   |
+          |   |   |   \---Tabs
+          |   |   |           AddUserTab.js
+          |   |   |           UsersListTab.js
+          |   |   |
+          |   |   \---hooks
+          |   |           useUsersData.js
+          |   |
+          |   \---utils
+          |           const_variables.js
+          |
+          \---theme
+                  colors.js
+  ```
 
 ### Backend
 
@@ -448,9 +450,7 @@ Below is a list of the available API endpoints grouped by functionality.
 > **Note:**  
 > All endpoints support an optional format suffix (e.g., `.json`, `.xml`) where indicated.  
 > Ensure that you include the proper JWT token in the `Authorization` header for secured endpoints.
-
-
-*Note:* The API is secured using JWT. There is also custom permissions depending on user role.
+> There are also custom permissions depending on user role.
 
 ---
 
@@ -459,4 +459,4 @@ Below is a list of the available API endpoints grouped by functionality.
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/AdrianSajdak/ManagementApp.git
+   git clone https://github.com/AdrianSajdak/Management.git
